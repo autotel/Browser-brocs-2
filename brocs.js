@@ -6,7 +6,7 @@ $(document).ready(function(){
 	   	if(pointer.dragging){
 	   		pointer.dragging.move(pointer.pos.x,pointer.pos.y);
 				for (var b = 0; b < brocs.length; b++) {
-					brocs[b].checkConnectors();
+					brocs[b].checkNodes();
 				}
 			}
 

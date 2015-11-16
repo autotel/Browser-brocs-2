@@ -97,6 +97,7 @@ function Draggable(){
 		//fallback sprite is a circle
 		if(!this.sprite)
 			this.sprite=two.makeCircle(0,0,this.rad);
+			
 		this.move(this.pos.x,this.pos.y);
 		two.update();
 		this.elem=$(domElem(this.sprite));
@@ -104,10 +105,10 @@ function Draggable(){
 		this.elem[0].super=this;
 		//append jquery functions to this object's dom sprite
 		this.elem.on("mouseenter",function(){
-			this.super.sprite.fill="#CCC";
+			this.super.sprite.fill="rgba(255,255,255,0.7)";
 			this.super.hover=true;
 		}).on("mouseleave",function(){
-			this.super.sprite.fill="rgba(255,255,255,0.2)";
+			this.super.sprite.fill="rgba(255,255,255,0.1)";
 			this.super.hover=false;
 			return false;
 		}).on("mousedown",function(){

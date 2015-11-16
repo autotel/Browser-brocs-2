@@ -10,7 +10,7 @@
 	checkBrocConnectors=function(){
 	var start = new Date().getTime();
 	for(n in brocs){
-		if(brocs[n].checkConnectors(brocs[n])){
+		if(brocs[n].checkNodes(brocs[n])){
 		  console.log("f");
 		};
 	};
@@ -19,8 +19,17 @@
 		console.log('Execution time: ' + time);
 	};
 
+connectors={};
+function Connector(a,b){
+	this.sprite=two.makeCircle((a.pos.x+b.pos.x)/2,(a.pos.y+b.pos.y)/2,connectorSize);
+	this.sprite.fill="#FF0";
+	this.remove=function(){
+		$("#"+this.sprite.id).detach();
+		console.log("jj");
+	}
+}
 
-
+connectors=[];
 
 function Broc(ind){
 	this.ind=ind;
@@ -35,49 +44,61 @@ function Broc(ind){
 		y:Math.random()*200
 	};
 
-	this.connectors=Array(6);
+	this.nodes=Array(6);
 	par=this;
-	Con=function(){
+	Node=function(){
 		this.pos=a;
 		this.ind=ind;
 		this.par=par;
 		this.absPos=function(){return sumPos(hexPos[this.pos],this.par.pos)};
 		this.sprite=two.makeCircle(this.absPos().x,this.absPos().y,connectorSize);
-		this.refresh=function(){	this.sprite.translation.x=this.absPos().x;this.sprite.translation.y=this.absPos().y;};//pendant: make the abspos function once an unpack
+		this.refresh=function(){
+			this.sprite.translation.x=this.absPos().x;
+			this.sprite.translation.y=this.absPos().y;
+		};//pendant: make the abspos function once an unpack
 		this.son=false;
+		this.visible=false;
 	}
-	for(a=0;a<this.connectors.length;a++){//we maybe not need an object....
-		this.connectors[a]=new Con();
+	for(a=0;a<this.nodes.length;a++){//we maybe not need an object....
+		this.nodes[a]=new Node();
 	}
 	this.sprite=two.makeGroup(this.sprites);
 	this.init();
-	this.checkConnectors=function(){
+	this.checkNodes=function(){
 		//console.log("check connector");
-		for(c=0;c<this.connectors.length;c++){
-			//console.log(this.connectors[c].absPos());
+		//pendant: these could be much more efficient if one brocs ouldnt check back what was already checked y the other
+		for(c=0;c<this.nodes.length;c++){
+			//console.log(this.nodes[c].absPos());
 			//console.log("number"+c);
 			n=0;
-
+			who={};
 			for(b=0;b<brocs.length;b++){
-				//console.log(Math.abs(this.connectors[c].absPos().x-brocs[b].pos.x));
-				if(this.connectors[c].ind!=brocs[b].ind)
+				//console.log(Math.abs(this.nodes[c].absPos().x-brocs[b].pos.x));
+				if(this.nodes[c].ind!=brocs[b].ind)
 				//pendant: this method detects sqares. we need to detect the exact shape
-				if(Math.abs(this.connectors[c].absPos().x-brocs[b].pos.x)<brocSize&&Math.abs(this.connectors[c].absPos().y-brocs[b].pos.y)<brocSize){
+				if(Math.abs(this.nodes[c].absPos().x-brocs[b].pos.x)<brocSize&&Math.abs(this.nodes[c].absPos().y-brocs[b].pos.y)<brocSize){
 					n++;
+					who=brocs[b];
 				}
 			}
 			if(n>0){
-				this.connectors[c].sprite.fill="#F00";
+				this.nodes[c].sprite.fill="transparent";
+				this.nodes[c].sprite.stroke="rgba(0,0,0,0.6)";
+				// if(typeof connectors[this.ind+"_"+c]=='undefined')
+				// connectors[this.ind+"_"+c]=new Connector(this,who);
 			}else{
-				this.connectors[c].sprite.fill="#FFF";
+				this.nodes[c].sprite.fill="transparent";
+				this.nodes[c].sprite.stroke="transparent";
+
 			}
+
 		}
 
 		return false;
 	}
 	this.moving=function(){
-		for(c=0;c<this.connectors.length;c++){
-			this.connectors[c].refresh();
+		for(c=0;c<this.nodes.length;c++){
+			this.nodes[c].refresh();
 		}
 	};
 }
