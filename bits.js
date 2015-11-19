@@ -8,14 +8,14 @@ for(a=0; a<hexPos.length; a++){
 		hexPos[a]={x:Math.cos(((a+0.5)/6)*(Math.PI*2))*brocSize*0.866025,y:Math.sin(((a+0.5)/6)*(Math.PI*2))*brocSize*0.866025}
 }
 
-brocHere=function(){
-	ret=false;
-	for (var b = 0; b < brocs.length; b++) {
-		if(brocs[b].imhere(pointer.pos))
-			ret=brocs[b]
-	};
-	return ret;
-}
+// brocHere=function(){
+// 	ret=false;
+// 	for (var b = 0; b < brocs.length; b++) {
+// 		if(brocs[b].imhere(pointer.pos))
+// 			ret=brocs[b]
+// 	};
+// 	return ret;
+// }
 
 domElem=function(me){
 	return "#"+me.id;
@@ -63,8 +63,8 @@ function ngon(px,py,sides,rad){
 	}
 	return ngon;
 }
-function Clickable(pos){
-}
+// function Clickable(pos){
+// }
 
 //draggable object
 function Draggable(){
@@ -89,6 +89,7 @@ function Draggable(){
 		this.pos=pos;
 		this.moving();//pendant: this works as a sort of event handler for objects prototyped from this. not very elegant
 	}
+	this.onMouseDown=function(){};
 	this.imhere=function(pos){
 		if(Math.abs(this.pos.x-pos.x)<this.rad&&Math.abs(this.pos.y-pos.y)<this.rad){
 		return true;}else{
@@ -103,7 +104,6 @@ function Draggable(){
 		//fallback sprite is a circle
 		if(!this.sprite)
 			this.sprite=two.makeCircle(0,0,this.rad);
-
 		this.move(this.pos);
 		two.update();
 		this.elem=$(domElem(this.sprite));
@@ -124,6 +124,7 @@ function Draggable(){
 		}).on("mousedown",function(){
 			this.main.dragging=this.main.hover;
 			pointer.dragging=this.main;
+			this.main.onMouseDown();
 		}).on("mouseup",function(){
 
 			this.main.dragging=false;

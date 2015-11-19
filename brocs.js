@@ -2,7 +2,6 @@
 
 var layer=[];
 $(document).ready(function(){
-
 	//layer three is redrawn every frame
 	layer[3]=two.makeGroup();
 	//pendiente: to solve the drawing order issue with lines,
@@ -10,16 +9,16 @@ $(document).ready(function(){
 	layer[2]=two.makeGroup();
 	layer[1]=two.makeGroup();
 	layer[0]=two.makeGroup();
-
 	$("#canvas").on("mousemove", function(e){
 	    pointer.pos.x=e.clientX-$(this).offset().left;
 	   	pointer.pos.y=e.clientY-$(this).offset().top;
+			two.remove(layer[3]);
+			layer[3]=two.makeGroup();
+			for (var b = 0; b < brocs.length; b++) {
+				brocs[b].refreshlines();
+			};
 	   	if(pointer.dragging){
-				two.remove(layer[3]);
-				layer[3]=two.makeGroup();
-				for (var b = 0; b < brocs.length; b++) {
-					brocs[b].refreshlines();
-				};
+
 				//console.log(pointer.pos.x)
 	   		pointer.dragging.move({x:pointer.pos.x,y:pointer.pos.y});
 				for (var b = 0; b < brocs.length; b++) {

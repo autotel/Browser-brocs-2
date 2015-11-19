@@ -52,14 +52,13 @@ function Broc(ind){
 	this.sprite=new Two.Path(ngon(0,0,6,brocSize),true,false);
 	this.sprite.addTo(layer[1]);
 	this.rad=brocSize;
+	this.sound=envs.testfnv;
 	two.add(this.sprite);
 	this.kind=kinds.normal;
 	this.pos={
 		x:Math.random()*100,
 		y:Math.random()*200
-	};
-
-
+	}
 	this.init();//drawingorder
 	//this.sprites.push(this.node);
 	//this.sprite=two.makeGroup(this.sprites);
@@ -70,6 +69,9 @@ function Broc(ind){
 		this.node.move({x:pointer.pos.x,y:pointer.pos.y});
 
 	};
+	this.onMouseDown=function(){
+		playMultiEnvelope(this.sound);
+	}
 	this.refreshlines=function(){
 		for(s=0;s<this.sons.length;s++){
 			//if(this.sons.line)
