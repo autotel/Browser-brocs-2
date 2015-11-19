@@ -8,50 +8,19 @@ for(a=0; a<hexPos.length; a++){
 		hexPos[a]={x:Math.cos(((a+0.5)/6)*(Math.PI*2))*brocSize*0.866025,y:Math.sin(((a+0.5)/6)*(Math.PI*2))*brocSize*0.866025}
 }
 
-brocHere=function(){
-	ret=false;
-	for (var b = 0; b < brocs.length; b++) {
-		if(brocs[b].imhere(pointer.pos))
-			ret=brocs[b]
-	};
-	return ret;
-}
 
 domElem=function(me){
 	return "#"+me.id;
 }
-
 sumPos=function(a,b){
 //	console.log(b);
 	return {x:a.x+b.x,y:a.y+b.y};
 }
-
 //creation of a graphic friendly mouse object
 var pointer={
 	//pendant: include scroll desphase
 	pos:{x:0,y:0},
-	dragging:false,
-	// onMouseUps:[function(){
-	// 	pointer.dragging=false;
-	// }],
-	// onMouseUp:function(f){
-	// 	this.onMouseUps.push(f);
-	// },
-	mouseUp:function(who){
-		// console.log("mouseup:");
-		// console.log(who);
-		for(drg in this.dragging){
-		//	if(isdef(this.dragging.onRelease))
-				if(typeof(this.dragging.onRelease)=="function")
-					this.dragging.onRelease(who);
-			this.dragging=false;
-		}
-		// for(f=0; f<this.onMouseUps.length;f++){
-		// 	console.log("ff");
-		// 	//if(typeof(f)=="function")
-		// 	this.onMouseUps[f]();
-		// }
-	}
+	dragging:false
 }
 //array of anchors for ngon creation
 function ngon(px,py,sides,rad){
@@ -64,8 +33,42 @@ function ngon(px,py,sides,rad){
 	return ngon;
 }
 function Clickable(pos){
-}
+	this.rad=connectorSize;
+	this.pos=pos;
+	if(!this.pos)
+		this.pos={x:0,y:0};
+	this.clickCall=function(){
+		console.log("clickCall was not defined for:");
+		console.log(this);
+	}
+	this.hover=false;
+	this.sprite=false;
 
+	this.init=function(){
+		//fallback sprite is a circle
+		if(!this.sprite)
+			this.sprite=two.makeCircle(this.pos.x,this.pos.y,this.rad);
+		two.update();
+		this.elem=$(domElem(this.sprite));
+		//attach a this to the dom element to make back-scope
+		this.elem[0].super=this;
+		//append jquery functions to this object's dom sprite
+		this.elem.on("mouseenter",function(){
+			this.super.sprite.fill="#CCC";
+			this.super.hover=true;
+		}).on("mousedown",function(){
+			this.super.clickCall();
+			return false;
+		}).on("mouseup",function(){
+			return false;
+		});
+		/*.on("mouseleave",function(){
+			this.super.sprite.fill="rgba(255,255,255,0.2)";
+			this.super.hover=false;
+			return false;
+		})*/
+	}
+}
 //draggable object
 function Draggable(){
 	// if(!this.sprites)
@@ -78,57 +81,44 @@ function Draggable(){
 	this.dragging=false;
 	this.hover=false;
 	this.sprite=false;//eliminar esta par reemplazarla por el array sprites
-	this.move=function(pos){
+	this.move=function(x,y){
 		// for(i in this.sprites){
 		// 	this.sprites[i].translation.x=x;
 		// 	this.sprites[i].translation.y=y;
 		// }
-		//console.log(pos);
-		this.sprite.translation.x=pos.x;
-		this.sprite.translation.y=pos.y;
-		this.pos=pos;
+		this.sprite.translation.x=x;
+		this.sprite.translation.y=y;
+		this.pos.x=x;
+		this.pos.y=y;
 		this.moving();//pendant: this works as a sort of event handler for objects prototyped from this. not very elegant
 	}
-	this.imhere=function(pos){
-		if(Math.abs(this.pos.x-pos.x)<this.rad&&Math.abs(this.pos.y-pos.y)<this.rad){
-		return true;}else{
-			return false;
-		}
-	}
 	this.moving=function(){}
-	this.release=function(){
-		pointer.mouseUp(this);
-	}
 	this.init=function(){
 		//fallback sprite is a circle
 		if(!this.sprite)
 			this.sprite=two.makeCircle(0,0,this.rad);
-
-		this.move(this.pos);
+			
+		this.move(this.pos.x,this.pos.y);
 		two.update();
 		this.elem=$(domElem(this.sprite));
 		//attach a this to the dom element to make back-scope
-		this.elem[0].main=this;
+		this.elem[0].super=this;
 		//append jquery functions to this object's dom sprite
-		//pendiente: this may need to go in the pointer object, isn't it?
 		this.elem.on("mouseenter",function(){
-			this.main.sprite.fill="rgba(127,127,255,0.7)";
-			this.main.hover=true;
+			this.super.sprite.fill="rgba(255,255,255,0.7)";
+			this.super.hover=true;
 		}).on("mouseleave",function(){
-			this.main.sprite.fill="rgba(127,127,255,0.3)";
-			this.main.hover=false;
-			//avoid pieces stuck to mouse. should this be?
-			/*this.main.dragging=false;
-			this.main.release();
-			pointer.dragging=false;*/
+			this.super.sprite.fill="rgba(255,255,255,0.1)";
+			this.super.hover=false;
+			return false;
 		}).on("mousedown",function(){
-			this.main.dragging=this.main.hover;
-			pointer.dragging=this.main;
+			this.super.dragging=this.super.hover;
+			pointer.dragging=this.super;
+			return false;
 		}).on("mouseup",function(){
-
-			this.main.dragging=false;
-			this.main.release();
-			pointer.mouseUp(this);
+			this.super.dragging=false;
+			pointer.dragging=false;
+			return false;
 		});
 	}
 };

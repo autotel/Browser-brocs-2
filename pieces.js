@@ -3,40 +3,55 @@
 
 	//this will store the kind specific functions
 	kinds={normal:""};
-	//a broc block
 
+function Node(ind){
+	this.name="node"+ind;
 
-
-	checkBrocConnectors=function(){
-	var start = new Date().getTime();
-	for(n in brocs){
-		if(brocs[n].checkNodes(brocs[n])){
-		  console.log("f");
-		};
+	this.pos=a;
+	this.ind=ind;
+	this.par=par;
+	this.broc;
+	this.sprite=two.makeCircle(0,0,brocSize*1.2);
+	this.sprite.addTo(layer[2]);
+	this.$elem=$(domElem(this.sprite));
+	main=this;
+	//these are triggered by their draggable bit
+	this.moving=function(){
+		//if(pos){
+			//this.sprite.scale=Math.abs(this.pos.x-this.broc.pos.x);
+		//}
 	};
-		var end = new Date().getTime();
-		var time = end - start;
-		console.log('Execution time: ' + time);
-	};
-
-connectors={};
-function Connector(a,b){
-	this.sprite=two.makeCircle((a.pos.x+b.pos.x)/2,(a.pos.y+b.pos.y)/2,connectorSize);
-	this.sprite.fill="#FF0";
-	this.remove=function(){
-		$("#"+this.sprite.id).detach();
-		console.log("jj");
+	//these are triggered by their draggable bit
+	//who is the subject over which mouse was released
+	this.onRelease=function(who){
+		if(who instanceof (Broc) )
+		this.broc.sons.push(who);
+		// console.log(who);
+		this.move(this.broc.pos);
+		// console.log("this:");
+		// console.log(this);
 	}
-}
+	//pendant: make the abspos function once an unpack
+	this.active=false;
+};
 
-connectors=[];
+$(document).ready(function(){
+	Broc.prototype=new Draggable();
+	Node.prototype=new Draggable();
+});
 
 function Broc(ind){
+	this.name="broc"+ind;
+	this.sons=[];
+	this.node;
+	par=this;
+	this.node=new Node(a);
+	this.node.init();
+	this.node.broc=this;
 	this.ind=ind;
 	this.sprite=new Two.Path(ngon(0,0,6,brocSize),true,false);
+	this.sprite.addTo(layer[1]);
 	this.rad=brocSize;
-	this.sprites=[this.sprite];
-	//this.sprites.push(this.sprite);
 	two.add(this.sprite);
 	this.kind=kinds.normal;
 	this.pos={
@@ -44,67 +59,27 @@ function Broc(ind){
 		y:Math.random()*200
 	};
 
-	this.nodes=Array(6);
-	par=this;
-	Node=function(){
-		this.pos=a;
-		this.ind=ind;
-		this.par=par;
-		this.absPos=function(){return sumPos(hexPos[this.pos],this.par.pos)};
-		this.sprite=two.makeCircle(this.absPos().x,this.absPos().y,connectorSize);
-		this.refresh=function(){
-			this.sprite.translation.x=this.absPos().x;
-			this.sprite.translation.y=this.absPos().y;
-		};//pendant: make the abspos function once an unpack
-		this.son=false;
-		this.visible=false;
-	}
-	for(a=0;a<this.nodes.length;a++){//we maybe not need an object....
-		this.nodes[a]=new Node();
-	}
-	this.sprite=two.makeGroup(this.sprites);
-	this.init();
-	this.checkNodes=function(){
-		//console.log("check connector");
-		//pendant: these could be much more efficient if one brocs ouldnt check back what was already checked y the other
-		for(c=0;c<this.nodes.length;c++){
-			//console.log(this.nodes[c].absPos());
-			//console.log("number"+c);
-			n=0;
-			who={};
-			for(b=0;b<brocs.length;b++){
-				//console.log(Math.abs(this.nodes[c].absPos().x-brocs[b].pos.x));
-				if(this.nodes[c].ind!=brocs[b].ind)
-				//pendant: this method detects sqares. we need to detect the exact shape
-				if(Math.abs(this.nodes[c].absPos().x-brocs[b].pos.x)<brocSize&&Math.abs(this.nodes[c].absPos().y-brocs[b].pos.y)<brocSize){
-					n++;
-					who=brocs[b];
-				}
-			}
-			if(n>0){
-				this.nodes[c].sprite.fill="transparent";
-				this.nodes[c].sprite.stroke="rgba(0,0,0,0.6)";
-				// if(typeof connectors[this.ind+"_"+c]=='undefined')
-				// connectors[this.ind+"_"+c]=new Connector(this,who);
-			}else{
-				this.nodes[c].sprite.fill="transparent";
-				this.nodes[c].sprite.stroke="transparent";
 
-			}
-
-		}
-
-		return false;
-	}
+	this.init();//drawingorder
+	//this.sprites.push(this.node);
+	//this.sprite=two.makeGroup(this.sprites);
+	main=this;
 	this.moving=function(){
-		for(c=0;c<this.nodes.length;c++){
-			this.nodes[c].refresh();
-		}
+		//console.log(main.pos);
+		//main.pos
+		this.node.move({x:pointer.pos.x,y:pointer.pos.y});
+
 	};
+	this.refreshlines=function(){
+		for(s=0;s<this.sons.length;s++){
+			//if(this.sons.line)
+					two.remove(this.sons.line);
+				this.sons.line=new Two.Line(this.pos.x,this.pos.y,this.sons[s].pos.x, this.sons[s].pos.y).addTo(layer[3]);
+		}
+	}
+
 }
-$(document).ready(function(){
-	Broc.prototype=new Draggable();
-});
+
 
 
 

@@ -2,7 +2,7 @@
 <head>
 	<script src="two.min.js"></script>
 	<script src="jquery.js"></script>
-	<!--<script src="paperjs/paper-full.min.js"></script>-->
+	<script src="paperjs/paper-full.min.js"></script>
 	<script src="bits.js"></script>
 	<script src="pieces.js"></script>
 	<script src="brocs.js"></script>
@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<div style=" width:600; height:600; border:solid 1px; top:300; left:100" id="canvas">
+<div style=" width:300; height:100; border:solid 2px; top:300; left:100" id="canvas">
 	<div id="display"></div>
 </div>
 
@@ -18,9 +18,8 @@
 <script>
 var elem=document.getElementById("canvas");
 var params={width:600,height:800};
-
 var two = new Two(params).appendTo(elem);
-two.type="webgl";
+
 </script>
 <script>
 
