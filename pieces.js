@@ -6,7 +6,6 @@
 
 function Node(ind){
 	this.name="node"+ind;
-
 	this.pos=a;
 	this.ind=ind;
 	this.par=par;
@@ -30,6 +29,17 @@ function Node(ind){
 		this.move(this.broc.pos);
 		// console.log("this:");
 		// console.log(this);
+	}
+	this.visible=function(val){
+		if(val){
+			console.log(val);
+			this.sprite.fill="rgba(127,255,255,0.7)";
+			this.sprite.stroke="black";
+		}else{
+			console.log(val);
+			//this.sprite.fill="transparent";
+			this.sprite.stroke="transparent";
+		}
 	}
 	//pendant: make the abspos function once an unpack
 	this.active=false;
@@ -63,23 +73,36 @@ function Broc(ind){
 	//this.sprites.push(this.node);
 	//this.sprite=two.makeGroup(this.sprites);
 	main=this;
-	this.moving=function(){
+	this.onMove=function(){
 		//console.log(main.pos);
 		//main.pos
 		this.node.move({x:pointer.pos.x,y:pointer.pos.y});
-
 	};
 	this.onMouseDown=function(){
-		playMultiEnvelope(this.sound);
+		//oldmousedown();
+		if(this.isselected()){
+			playMultiEnvelope(this.sound);
+		}else{
+			this.setselected(true)
+		}
 	}
+	// this.select=function(val){
+	// 	if(val){
+	// 		this.selected=true;
+	// 		this.node.visible(true);
+	// 		//this.node.move({x:pointer.pos.x,y:pointer.pos.y});
+	// 	}else{
+	// 		this.selected=false;
+	// 		this.node.visible(false);
+	// 	}
+	// }
 	this.refreshlines=function(){
 		for(s=0;s<this.sons.length;s++){
 			//if(this.sons.line)
 					two.remove(this.sons.line);
 				this.sons.line=new Two.Line(this.pos.x,this.pos.y,this.sons[s].pos.x, this.sons[s].pos.y).addTo(layer[3]);
 		}
-	}
-
+	};
 }
 
 

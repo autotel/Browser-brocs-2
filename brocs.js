@@ -18,15 +18,12 @@ $(document).ready(function(){
 				brocs[b].refreshlines();
 			};
 	   	if(pointer.dragging){
-
-				//console.log(pointer.pos.x)
 	   		pointer.dragging.move({x:pointer.pos.x,y:pointer.pos.y});
-				for (var b = 0; b < brocs.length; b++) {
-					//brocs[b].checkNodes();
-				}
 			}
 	}).on("mousedown",function(){
-		return false;
+		//  for (var b = 0; b < brocs.length; b++) {
+		//  	brocs[b].setselected(false);
+		//  }
 	}).on("mouseup",function(){
 		/*this.main.dragging=false;
 		this.main.release();*/
