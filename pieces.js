@@ -22,13 +22,11 @@ function Node(ind){
 	};
 	//these are triggered by their draggable bit
 	//who is the subject over which mouse was released
-	this.onRelease=function(who){
-		if(who instanceof (Broc) )
-		this.broc.sons.push(who);
-		// console.log(who);
-		this.move(this.broc.pos);
-		// console.log("this:");
-		// console.log(this);
+	this.onMouseUp=function(who){
+		if(who instanceof (Broc) ){
+			this.broc.sons.push(who);
+		}
+		this.move(this.broc.pos)
 	}
 	this.visible=function(val){
 		if(val){
@@ -39,16 +37,25 @@ function Node(ind){
 			console.log(val);
 			//this.sprite.fill="transparent";
 			this.sprite.stroke="transparent";
+			//pendant: make the abspos function once an unpack
+			this.active=false;
 		}
 	}
-	//pendant: make the abspos function once an unpack
-	this.active=false;
+	this.ishover=function(){
+		this.paint();
+		return(((1<<0)&this.selectflag) !=  0)|(((1<<0)&this.broc.selectflag) !=  0);
+	}
 };
 
 $(document).ready(function(){
 	Broc.prototype=new Draggable();
 	Node.prototype=new Draggable();
 });
+//testing purposes, from http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
+var randomProperty = function (obj) {
+	var keys = Object.keys(obj)
+	return obj[keys[ keys.length * Math.random() << 0]];
+};
 
 function Broc(ind){
 	this.name="broc"+ind;
@@ -62,7 +69,8 @@ function Broc(ind){
 	this.sprite=new Two.Path(ngon(0,0,6,brocSize),true,false);
 	this.sprite.addTo(layer[1]);
 	this.rad=brocSize;
-	this.sound=envs.testfnv;
+	this.sound=randomProperty(envs);
+
 	two.add(this.sprite);
 	this.kind=kinds.normal;
 	this.pos={
@@ -79,11 +87,11 @@ function Broc(ind){
 		this.node.move({x:pointer.pos.x,y:pointer.pos.y});
 	};
 	this.onMouseDown=function(){
-		//oldmousedown();
 		if(this.isselected()){
-			playMultiEnvelope(this.sound);
+			this.trigger();
 		}else{
 			this.setselected(true)
+			this.node.setselected(true);
 		}
 	}
 	// this.select=function(val){
@@ -100,9 +108,46 @@ function Broc(ind){
 		for(s=0;s<this.sons.length;s++){
 			//if(this.sons.line)
 					two.remove(this.sons.line);
-				this.sons.line=new Two.Line(this.pos.x,this.pos.y,this.sons[s].pos.x, this.sons[s].pos.y).addTo(layer[3]);
+				this.sons.line=new Two.Line(this.pos.x,this.pos.y,this.sons[s].pos.x, this.sons[s].pos.y).addTo(redframe);
 		}
 	};
+	this.node.move(this.pos);
+
+	this.setapunto=function(val,f){
+		this.selectflag &= ~(1<<4);//clear
+		this.selectflag |= (val<<4);
+		this.paint();
+		this.triggerNow=false;
+		if(f)
+		this.nextStepFunction=f;
+	}
+	//function to make in the next metro
+	this.nextStepFunction=false;
+	this.trigger=function(){
+		this.setapunto(true,this.soundTrigger);
+	};
+	this.triggerNow=false;
+	this.untrigger=function(){
+		//ger rid of pendant actions
+		if(this.nextStepFunction && this.soundTrigger){
+			this.nextStepFunction();
+			//trigger each son
+			for(a=0;a<this.sons.length;a++){
+				this.sons[a].trigger();
+			}
+			this.nextStepFunction=false;
+			this.setapunto(false);
+		}
+	}
+	this.metro=function(){
+		//do the saved function, delete it and append new function if there is
+		//stf ensures that this step is not the same in which nextstepfunction was assigned
+
+		this.triggerNow=true;
+	}
+	this.soundTrigger=function(){
+		playMultiEnvelope(this.sound);
+	}
 }
 
 

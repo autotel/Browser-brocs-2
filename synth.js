@@ -9,14 +9,15 @@ gainNode.gain.value=0;
 oscillator.connect(gainNode);
 gainNode.connect(audioCtx.destination);
 
+
 playEnvelope=function(envelope, who){
-	/*console.log("playing");
-	console.log(who);
-	console.log(envelope);*/
+	/*//console.log("playing");
+	//console.log(who);
+	//console.log(envelope);*/
 	var now=audioCtx.currentTime;
 	who.cancelScheduledValues(now);
 	for(var keyframe in envelope){
-		console.log("("+envelope[keyframe]+",now+"+parseFloat(keyframe)+")");
+		//console.log("("+envelope[keyframe]+",now+"+parseFloat(keyframe)+")");
 		who.linearRampToValueAtTime(parseFloat(envelope[keyframe]),now+parseFloat(keyframe));
 	};
 };
@@ -48,11 +49,11 @@ var envs={
 
 $(".trigger").on("mousedown",function(e){
 	playMultiEnvelope(envs[$(this).data("env")]);
-	/*console.log("d");
+	/*//console.log("d");
 	var ttime=audioCtx.currentTime;
 	gainNode.gain.setValueAtTime(1, audioCtx.currentTime + 0.01);
 	gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime+0.2);
 	oscillator.frequency.linearRampToValueAtTime(e.clientX, audioCtx.currentTime + 0.01);
 	oscillator.frequency.linearRampToValueAtTime(440, audioCtx.currentTime+0.2);
-	console.log("d");*/
+	//console.log("d");*/
 });
