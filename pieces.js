@@ -119,7 +119,7 @@ function Broc(ind){
 		this.paint();
 		this.triggerNow=false;
 		if(f)
-		this.nextStepFunction=f;
+			this.nextStepFunction=f;
 	}
 	//function to make in the next metro
 	this.nextStepFunction=false;
@@ -129,7 +129,7 @@ function Broc(ind){
 	this.triggerNow=false;
 	this.untrigger=function(){
 		//ger rid of pendant actions
-		if(this.nextStepFunction && this.soundTrigger){
+		if(this.nextStepFunction && this.triggerNow){
 			this.nextStepFunction();
 			//trigger each son
 			for(a=0;a<this.sons.length;a++){
