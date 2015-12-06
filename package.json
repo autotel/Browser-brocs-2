@@ -1,0 +1,11 @@
+{
+  "name": "BrowserLicog",
+  "version": "0.0.1",
+  "description": "Collaborative licog composer on browser",
+  "homepage": "http://autotel.co",
+  "dependencies": {
+    "express": "^4.10.2",
+    "http": "1.0.0 - 2.9999.9999",
+    "socket.io": "1.x"
+  }
+}
