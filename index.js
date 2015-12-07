@@ -38,6 +38,15 @@ io.on('connection', function(socket){
     users.splice(pos,1);
     io.emit('disconnect',id);
   });
+  socket.on('sons', function(msg){
+    console.log(msg);
+    //pendant: check if this method only broadcasts to others and not the sender
+    socket.broadcast.emit('sons',msg);
+  });
+  socket.on('pos', function(msg){
+    console.log(msg);
+    socket.broadcast.emit('pos',msg);
+  });
   socket.on('update', function(who,msg){
     //console.log('update: '+ who +" sent "+ msg);
     socket.broadcast.emit('update',who, msg);

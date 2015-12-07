@@ -22,6 +22,7 @@ function Draggable(){
 		this.sprite.translation.x=pos.x;
 		this.sprite.translation.y=pos.y;
 		this.pos=pos;
+		
 		this.onMove();//pendant: this works as a sort of event handler for objects prototyped from this. not very elegant
 	}
 

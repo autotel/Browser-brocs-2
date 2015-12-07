@@ -1,9 +1,14 @@
 
-
+ refreshlines=function(){
+	 layer[3].remove(redframe);
+	 	redframe=two.makeGroup();
+	 	redframe.addTo(layer[3]);
+	 	for (var b = 0; b < brocs.length; b++) {
+	 		brocs[b].refreshlines();
+	 	};
+};
 var layer=[];
 $(document).ready(function(){
-
-
 	//pendiente: to solve the drawing order issue with lines,
 	// make a subgroup within group three so we can delete that one, and keep this layer under.
 	layer[2]=two.makeGroup();
@@ -18,18 +23,11 @@ $(document).ready(function(){
   e.preventDefault();  // cancel the native drag event chain
 //  console.log("dragstart");
 	}).on("mousemove", function(e){
-			pointer.mouseMove();
 
+			pointer.mouseMove();
 	    pointer.pos.x=e.clientX-$(this).offset().left;
 	   	pointer.pos.y=e.clientY-$(this).offset().top;
-
-			layer[3].remove(redframe);
-			redframe=two.makeGroup();
-			redframe.addTo(layer[3]);
-
-			for (var b = 0; b < brocs.length; b++) {
-				brocs[b].refreshlines();
-			};
+			refreshlines();
 	}).on("mousedown",function(){
 		//  for (var b = 0; b < brocs.length; b++) {
 		//  	brocs[b].setselected(false);

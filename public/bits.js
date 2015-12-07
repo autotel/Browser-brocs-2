@@ -64,6 +64,7 @@ var pointer={
 	mouseMove:function(){
 		if(this.dragging){
 			this.dragging.move({x:this.pos.x,y:this.pos.y});
+			
 		}
 		//console.log(pointer.dragging)
 	}

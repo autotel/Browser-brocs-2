@@ -24,17 +24,75 @@ var two = new Two(params).appendTo(elem);
 two.type="webgl";
 </script>
 <script>
-  $(document).ready(function(){
-    var socket = io();
-    $('form').submit(function(){
-      socket.emit('chat message', $('#m').val());
-      $('#m').val('');
-      return false;
-    });
-    socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(msg));
-    });
+//pendant: this lacks efficiency.
+//Maybe the brocs should be stored on the serverside and send the incremental changes
+var transmit=function(){
+	console.log("no transmission yet, not finished");
+}
+var receive=function(){
+	console.log("no transmission yet, not finished");
+}
+var sock=function(){
+}
+w=function(whos){
+	var ret=null;
+
+	//whos=the string representing who I want to adress
+	whos=whos.split(/[\/\:]/g);
+	//there should be a less hardcoded way to do this
+	if(whos[0]=="broc"){
+		ret=brocs;
+		//console.log("brocmove")
+	}
+	//console.log(whos)
+	for(a=1;a<whos.length;a++){
+		ret=ret[whos[a]];
+	}
+	return ret;
+}
+
+
+$(document).ready(function(){
+	var socket = io();
+	//this is here just for easier maintenance, maybe could be shortcutted.
+	sock=function(subject,change,value){
+		//put the letter envelope
+		if(subject instanceof (Broc) ){
+			subject=subject.name;
+		}
+		if(subject instanceof (Node) ){
+			subject=subject.broc.name+'/'+subject.name+'/'+change;
+		}
+		//send the letter
+		socket.emit(change,{to:subject,val:value});
+	}
+	socket.on('pos', function(msg){
+		// console.log("broc pos:");
+		// console.log(msg.val)
+		//pendiente: esto no esta bien hierarquizado
+		subj=w(msg.to);
+		subj.sprite.translation.x=msg.val.x;
+		subj.sprite.translation.y=msg.val.y;
+		subj.pos=msg.val;
+		subj.node.move(msg.val);
+		refreshlines();
   });
+	socket.on('sons', function(msg){
+		// console.log("broc sons:");
+		// console.log(msg.val)
+		//pendiente: esto no esta bien hierarquizado
+		subj=w(msg.to);
+		subj.sons.push(w(msg.val));
+		refreshlines();
+  });
+	// socket.on('sons', function(msg){
+  //   console.log(msg);
+  // });
+	$(window).on('beforeunload', function(){
+	  socket.close();
+	});
+});
+
 </script>
 <script>
 two.bind('update',function(fr){

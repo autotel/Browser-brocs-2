@@ -3,7 +3,7 @@
 //node is the cicle underneath the broc piece that is dragged to chain brocs
 function Node(ind){
 	//only to identify it in the console
-	this.name="node"+ind;
+	this.name="node:"+ind;
 	//numeric index, for debugging purposes
 	this.ind=ind;
 	//the broc object that this node belongs to
@@ -21,6 +21,7 @@ function Node(ind){
 		//who is the subject over which mouse was released
 		if(who instanceof (Broc) ){
 			this.broc.sons.push(who);
+			sock(this.broc,"sons",who.name);
 		}
 		this.move(this.broc.pos)
 	}
@@ -54,7 +55,7 @@ var randomProperty = function (obj) {
 };
 
 function Broc(ind){
-	this.name="broc"+ind;
+	this.name="broc:"+ind;
 	this.sons=[];
 	this.node;
 	par=this;
@@ -80,8 +81,10 @@ function Broc(ind){
 	this.onMove=function(){
 		//console.log(main.pos);
 		//main.pos
-		if(this.alive)
-		this.node.move({x:pointer.pos.x,y:pointer.pos.y});
+		if(this.alive){
+			this.node.move({x:pointer.pos.x,y:pointer.pos.y});
+			sock(this,"pos",this.pos);
+		}
 	};
 	this.onRemove=function(){
 		this.node.remove();
