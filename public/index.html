@@ -61,33 +61,41 @@ $(document).ready(function(){
 			subject=subject.name;
 		}
 		if(subject instanceof (Node) ){
-			subject=subject.broc.name+'/'+subject.name+'/'+change;
+			subject=subject.broc.name+'/'+subject.name;
 		}
 		//send the letter
-		socket.emit(change,{to:subject,val:value});
+		socket.emit('change',{change:change,to:subject,val:value});
 	}
-	socket.on('pos', function(msg){
-		// console.log("broc pos:");
-		// console.log(msg.val)
-		//pendiente: esto no esta bien hierarquizado
+	//socket modifying actions
+	socket.on('change', function(msg){
 		subj=w(msg.to);
-		subj.sprite.translation.x=msg.val.x;
-		subj.sprite.translation.y=msg.val.y;
-		subj.pos=msg.val;
-		subj.node.move(msg.val);
-		refreshlines();
+    console.log(msg);
+		if(msg.change=='pos'){
+			// console.log("broc pos:");
+			// console.log(msg.val)
+			//pendiente: esto no esta bien hierarquizado
+
+			subj.sprite.translation.x=msg.val.x;
+			subj.sprite.translation.y=msg.val.y;
+			subj.pos=msg.val;
+			subj.node.move(msg.val);
+			refreshlines();
+		};
+		if(msg.change=='sons'){
+			// console.log("broc sons:");
+			// console.log(msg.val)
+			//pendiente: esto no esta bien hierarquizado
+			subj.sons.push(w(msg.val));
+			refreshlines();
+		};
+		if(msg.change=='del'){
+			subj.alive=false;
+			two.remove(subj.sprite);
+			$(subj.node.$elem.selector).fadeOut();//pendiente: nodes aren't deleting
+		};
   });
-	socket.on('sons', function(msg){
-		// console.log("broc sons:");
-		// console.log(msg.val)
-		//pendiente: esto no esta bien hierarquizado
-		subj=w(msg.to);
-		subj.sons.push(w(msg.val));
-		refreshlines();
-  });
-	// socket.on('sons', function(msg){
-  //   console.log(msg);
-  // });
+
+
 	$(window).on('beforeunload', function(){
 	  socket.close();
 	});

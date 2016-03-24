@@ -55,7 +55,13 @@ var envs={
 	testfnv:[{to:sine.vca.gain,envs:{'0':1,'0.52':0}},
 				{to:sine.oscillator.frequency,envs:{'0':330,'0.32':90}},
 				{to:noise.filter.frequency,envs:{'0':800,'0.32':200}},
-				{to:noise.vca.gain,envs:{'0':1,'0.32':0}}]
+				{to:noise.vca.gain,envs:{'0':1,'0.32':0}}],
+	minihh:[
+				{to:noise.filter.frequency,envs:{'0':400,'0.32':200}},
+				{to:noise.vca.gain,envs:{'0':2,'0.05':0}}],
+	minihho:[
+				{to:noise.filter.frequency,envs:{'0':400,'0.32':200}},
+				{to:noise.vca.gain,envs:{'0':1,'0.2':0}}]
 };
 
 

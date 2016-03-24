@@ -22,7 +22,6 @@ function Draggable(){
 		this.sprite.translation.x=pos.x;
 		this.sprite.translation.y=pos.y;
 		this.pos=pos;
-		
 		this.onMove();//pendant: this works as a sort of event handler for objects prototyped from this. not very elegant
 	}
 
@@ -64,6 +63,7 @@ function Draggable(){
 		this.onRemove();
 		this.alive=false;
 		two.remove(this.sprite);
+		sock(this,"del",this.pos);
 	}
 	this.sethover=function(val){
 		this.selectflag &= ~(1<<0);//clear

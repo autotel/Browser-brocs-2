@@ -3,7 +3,7 @@
 //node is the cicle underneath the broc piece that is dragged to chain brocs
 function Node(ind){
 	//only to identify it in the console
-	this.name="node:"+ind;
+	this.name="node";
 	//numeric index, for debugging purposes
 	this.ind=ind;
 	//the broc object that this node belongs to
@@ -25,6 +25,12 @@ function Node(ind){
 		}
 		this.move(this.broc.pos)
 	}
+	/*
+	this.onMove=function(){
+		if(this.alive){
+			sock(this,"pos",this.pos);
+		}
+	}*/
 	this.visible=function(val){
 		if(val){
 			console.log(val);
@@ -44,10 +50,7 @@ function Node(ind){
 	}
 };
 
-$(document).ready(function(){
-	Broc.prototype=new Draggable();
-	Node.prototype=new Draggable();
-});
+
 //testing purposes, from http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
 var randomProperty = function (obj) {
 	var keys = Object.keys(obj)
@@ -87,8 +90,10 @@ function Broc(ind){
 		}
 	};
 	this.onRemove=function(){
+		if(this.alive){
 		this.node.remove();
 		$(this.node.$elem.selector).fadeOut();//pendiente: nodes aren't deleting
+		}
 	}
 	this.onMouseDown=function(){
 		if(this.isselected()){
@@ -170,11 +175,57 @@ function Broc(ind){
 }
 
 
-
-
-/*var pat = new Two.Path(ngon(0,0,6,30),true,false);
-	var pat2 = new Two.Path(ngon(0,0,7,30),true,false);
-	two.add(pat);
-	two.add(pat2);
-	hand=new Draggable(12,12,pat);
-	hand2=new Draggable(0,12,pat2);*/
+function Applyer(ind,place){
+	this.place=place;
+	this.pos=this.place;
+	//only to identify it in the console
+	this.name="applyer";
+	//numeric index, for debugging purposes
+	this.ind=ind;
+	//the visible representation in two
+	this.sprite=new Two.Polygon(0, 0, 30, 3);
+	//being in a layer allows it to be always under the brocs
+	this.sprite.addTo(layer[1]);
+	//the jquery element of this node's sprite
+	this.$elem=$(domElem(this.sprite));
+	//the sound to apply upon release on broc
+	this.sound;
+	//main allows reference within jquery functions and others
+	main=this;
+	this.init();
+	//Functions that are triggered by the draggable class
+	this.onMouseUp=function(who){
+		//who is the subject over which mouse was released
+		if(who instanceof (Broc) ){
+			console.log("apply");
+			who.sound=this.sound;
+			sock(this.broc,"apply",who.name);
+		}
+		this.move(this.place);
+	}
+	this.onMouseDown=function(){
+		playMultiEnvelope(this.sound);
+	}
+	this.visible=function(val){
+		if(val){
+			console.log(val);
+			this.sprite.fill="rgba(127,255,255,0.7)";
+			this.sprite.stroke="black";
+		}else{
+			console.log(val);
+			//this.sprite.fill="transparent";
+			this.sprite.stroke="transparent";
+			//pendant: make the abspos function once an unpack
+			this.active=false;
+		}
+	}
+	this.ishover=function(){
+		this.paint();
+		return(((1<<0)&this.selectflag) !=  0)|(((1<<0)&this.broc.selectflag) !=  0);
+	}
+};
+$(document).ready(function(){
+	Broc.prototype=new Draggable();
+	Node.prototype=new Draggable();
+	Applyer.prototype=new Draggable();
+});
