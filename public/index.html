@@ -3,19 +3,21 @@
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 	<script src="two.min.js"></script>
 	<script src="jquery.js"></script>
-
 	<script src="noise.js"></script>
 	<script src="synth.js"></script>
 	<script src="bits.js"></script>
 	<script src="bit_draggable.js"></script>
 	<script src="pieces.js"></script>
 	<script src="brocs.js"></script>
-	 <meta charset="UTF-8">
+	<script src="ui.js"></script>
+	<meta charset="UTF-8">
+	<link href="main.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div style=" width:600; height:600; border:solid 1px; top:300; left:100" id="canvas">
 	<div id="display"></div>
 </div>
+<div id="params"></div>
 </body>
 <script>
 var elem=document.getElementById("canvas");
@@ -92,6 +94,9 @@ $(document).ready(function(){
 			subj.alive=false;
 			two.remove(subj.sprite);
 			$(subj.node.$elem.selector).fadeOut();//pendiente: nodes aren't deleting
+		};
+		if(msg.change=='trigger'){
+			subj.trigger(false);
 		};
   });
 

@@ -34,22 +34,27 @@ function Draggable(){
 	this.onMove=function(){}
 
 	this.paint=function(){
-		//console.log("paint"+this.selectflag)
+		// //console.log("paint"+this.selectflag)
 		if(this.alive){
 			if(this.selectflag & 1<<1){//dragging
-				this.sprite.fill="rgba(127,255,255,0.7)";
-				this.sprite.stroke="rgb(0,0,0)";
+				// this.sprite.fill="rgba(127,255,255,0.7)";
+				// this.sprite.stroke="rgb(0,0,0)";
+					this.elem.attr("class","draggable dragging");
 			}else if(this.selectflag & 1<<0){//over
-				this.sprite.fill="rgba(127,127,255,0.7)";
+				// this.sprite.fill="rgba(127,127,255,0.7)";
+				// this.elem.addClass("superbacan");
 			}else if(this.selectflag & 1<<2){//selected
-				this.sprite.fill="rgba(127,127,255,0.7)";
-				this.sprite.stroke="rgb(0,0,0)";
+				// this.sprite.fill="rgba(127,127,255,0.7)";
+				// this.sprite.stroke="rgb(0,0,0)";
+				this.elem.attr("class","draggable selected");
 			}else if(this.selectflag & 1<<4){//selected
-				this.sprite.fill="rgba(100,100,100,1)";
-				this.sprite.stroke="rgb(0,0,0)";
+				// this.sprite.fill="rgba(100,100,100,1)";
+				// this.sprite.stroke="rgb(0,0,0)";
+				this.elem.attr("class","draggable four");
 			}else{
-				this.sprite.fill="rgba(0,0,0,0.1)";
-				this.sprite.stroke="transparent";
+				// this.sprite.fill="rgba(0,0,0,0.1)";
+				// this.sprite.stroke="transparent";
+				this.elem.attr("class","draggable");
 			}
 		}else{
 
@@ -127,6 +132,7 @@ function Draggable(){
 		this.move(this.pos);
 		two.update();
 		this.elem=$(domElem(this.sprite));
+		this.elem.attr("class","draggable")
 		//attach a this to the dom element to make back-scope
 		this.elem[0].main=this;
 		//append jquery functions to this object's dom sprite

@@ -67,10 +67,10 @@ function Broc(ind){
 	this.node.broc=this;
 	this.ind=ind;
 	this.sprite=new Two.Path(ngon(0,0,6,brocSize),true,false);
+	// this.sprite=two.makeCircle(0,0,brocSize);
 	this.sprite.addTo(layer[1]);
 	this.rad=brocSize;
 	this.sound=randomProperty(envs);
-
 	two.add(this.sprite);
 	this.kind=kinds.normal;
 	this.pos={
@@ -101,6 +101,7 @@ function Broc(ind){
 		}else{
 			this.setselected(true)
 			this.node.setselected(true);
+			ui.edit(this);
 		}
 	}
 	// this.select=function(val){
@@ -142,9 +143,12 @@ function Broc(ind){
 	}
 	//function to make in the next metro
 	this.nextStepFunction=false;
-	this.trigger=function(){
-		if(this.alive)
-		this.setapunto(true,this.soundTrigger);
+	this.trigger=function(emit=true){
+		if(this.alive){
+			if(emit)
+				sock(this,"trigger");
+			this.setapunto(true,this.soundTrigger);
+		}
 	};
 	this.triggerNow=false;
 	this.untrigger=function(){
@@ -154,7 +158,7 @@ function Broc(ind){
 				this.nextStepFunction();
 				//trigger each son
 				for(a=0;a<this.sons.length;a++){
-					this.sons[a].trigger();
+					this.sons[a].trigger(false);
 				}
 				this.nextStepFunction=false;
 				this.setapunto(false);

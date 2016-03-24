@@ -1,7 +1,4 @@
-
-
 var layer=[];
-
 $(document).ready(function(){
   refreshlines=function(){
   	 layer[3].remove(redframe);

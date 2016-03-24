@@ -1,0 +1,52 @@
+path:hover{
+  opacity:1;
+  border:solid 3px;
+}
+path.draggable{
+  background-color: red;
+  border-radius: 10px;
+  stroke:#dadada;
+  stroke-width:2;
+  fill:#dfdfdf;
+  transition: 0.2s;
+  transition-timing-function: cubic-bezier(.2,-0.6,.65,.68);
+}
+path.draggable:hover{
+  fill: #CCC;
+  /*transform: scale(0.8);*/
+  transition:0.1s;
+}
+path.draggable.selected{
+  stroke:#000;
+  fill: #fff;
+  transition:0.5s;
+}
+path.draggable.four{
+  stroke:#fff;
+  fill: #fff;
+  stroke-width:8;
+}
+path.draggable.dragging{
+  stroke:#fff;
+  /*transform: scale(0.8);*/
+  transition:0.5s;
+}
+#params{
+  position:fixed;
+  right:0px;
+  top:10px;
+  background-color: #FFF;
+}
+#params .button{
+  display:block;
+  border:solid 1px #cdcdcd;
+  cursor: pointer;
+  padding:2px 5px;
+  margin:2px;
+}
+#params .button:hover{
+  background-color: #cdcdcd;
+}
+#params .button.selected{
+  border:solid 1px #000;
+}
