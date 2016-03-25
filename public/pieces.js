@@ -53,6 +53,7 @@ function Node(ind){
 
 //testing purposes, from http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
 var randomProperty = function (obj) {
+
 	var keys = Object.keys(obj)
 	return obj[keys[ keys.length * Math.random() << 0]];
 };
@@ -70,7 +71,7 @@ function Broc(ind){
 	// this.sprite=two.makeCircle(0,0,brocSize);
 	this.sprite.addTo(layer[1]);
 	this.rad=brocSize;
-	this.sound=randomProperty(envs);
+	this.sound=randomProperty(basicSynth.envs);
 	two.add(this.sprite);
 	this.kind=kinds.normal;
 	this.pos={
@@ -174,7 +175,7 @@ function Broc(ind){
 	}
 	this.soundTrigger=function(){
 		if(this.alive)
-		playMultiEnvelope(this.sound);
+		basicSynth.playMultiEnvelope(this.sound);
 	}
 }
 
@@ -208,7 +209,7 @@ function Applyer(ind,place){
 		this.move(this.place);
 	}
 	this.onMouseDown=function(){
-		playMultiEnvelope(this.sound);
+		basicSynth.playMultiEnvelope(this.sound);
 	}
 	this.visible=function(val){
 		if(val){
