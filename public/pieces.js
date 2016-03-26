@@ -71,7 +71,6 @@ function Broc(ind){
 	// this.sprite=two.makeCircle(0,0,brocSize);
 	this.sprite.addTo(layer[1]);
 	this.rad=brocSize;
-	this.sound=randomProperty(basicSynth.envs);
 	two.add(this.sprite);
 	this.kind=kinds.normal;
 	this.pos={
@@ -105,16 +104,6 @@ function Broc(ind){
 			ui.edit(this);
 		}
 	}
-	// this.select=function(val){
-	// 	if(val){
-	// 		this.selected=true;
-	// 		this.node.visible(true);
-	// 		//this.node.move({x:pointer.pos.x,y:pointer.pos.y});
-	// 	}else{
-	// 		this.selected=false;
-	// 		this.node.visible(false);
-	// 	}
-	// }
 	this.removeSon=function(s){
 		console.log("pendiente")
 	};
@@ -130,7 +119,6 @@ function Broc(ind){
 			}
 		}
 	};
-
 	this.node.move(this.pos);
 	this.setapunto=function(val,f){
 		if(this.alive){
@@ -174,63 +162,62 @@ function Broc(ind){
 		}
 	}
 	this.soundTrigger=function(){
-		if(this.alive)
-		basicSynth.playMultiEnvelope(this.sound);
+			basicSynth.playMultiEnvelope(randomProperty(basicSynth.envs));
 	}
 }
 
-
-function Applyer(ind,place){
-	this.place=place;
-	this.pos=this.place;
-	//only to identify it in the console
-	this.name="applyer";
-	//numeric index, for debugging purposes
-	this.ind=ind;
-	//the visible representation in two
-	this.sprite=new Two.Polygon(0, 0, 30, 3);
-	//being in a layer allows it to be always under the brocs
-	this.sprite.addTo(layer[1]);
-	//the jquery element of this node's sprite
-	this.$elem=$(domElem(this.sprite));
-	//the sound to apply upon release on broc
-	this.sound;
-	//main allows reference within jquery functions and others
-	main=this;
-	this.init();
-	//Functions that are triggered by the draggable class
-	this.onMouseUp=function(who){
-		//who is the subject over which mouse was released
-		if(who instanceof (Broc) ){
-			console.log("apply");
-			who.sound=this.sound;
-			sock(this.broc,"apply",who.name);
-		}
-		this.move(this.place);
-	}
-	this.onMouseDown=function(){
-		basicSynth.playMultiEnvelope(this.sound);
-	}
-	this.visible=function(val){
-		if(val){
-			console.log(val);
-			this.sprite.fill="rgba(127,255,255,0.7)";
-			this.sprite.stroke="black";
-		}else{
-			console.log(val);
-			//this.sprite.fill="transparent";
-			this.sprite.stroke="transparent";
-			//pendant: make the abspos function once an unpack
-			this.active=false;
-		}
-	}
-	this.ishover=function(){
-		this.paint();
-		return(((1<<0)&this.selectflag) !=  0)|(((1<<0)&this.broc.selectflag) !=  0);
-	}
-};
+//
+// function Applyer(ind,place){
+// 	this.place=place;
+// 	this.pos=this.place;
+// 	//only to identify it in the console
+// 	this.name="applyer";
+// 	//numeric index, for debugging purposes
+// 	this.ind=ind;
+// 	//the visible representation in two
+// 	this.sprite=new Two.Polygon(0, 0, 30, 3);
+// 	//being in a layer allows it to be always under the brocs
+// 	this.sprite.addTo(layer[1]);
+// 	//the jquery element of this node's sprite
+// 	this.$elem=$(domElem(this.sprite));
+// 	//the sound to apply upon release on broc
+// 	this.sound;
+// 	//main allows reference within jquery functions and others
+// 	main=this;
+// 	this.init();
+// 	//Functions that are triggered by the draggable class
+// 	this.onMouseUp=function(who){
+// 		//who is the subject over which mouse was released
+// 		if(who instanceof (Broc) ){
+// 			console.log("apply");
+// 			who.sound=this.sound;
+// 			sock(this.broc,"apply",who.name);
+// 		}
+// 		this.move(this.place);
+// 	}
+// 	this.onMouseDown=function(){
+// 		basicSynth.playMultiEnvelope(this.sound);
+// 	}
+// 	this.visible=function(val){
+// 		if(val){
+// 			console.log(val);
+// 			this.sprite.fill="rgba(127,255,255,0.7)";
+// 			this.sprite.stroke="black";
+// 		}else{
+// 			console.log(val);
+// 			//this.sprite.fill="transparent";
+// 			this.sprite.stroke="transparent";
+// 			//pendant: make the abspos function once an unpack
+// 			this.active=false;
+// 		}
+// 	}
+// 	this.ishover=function(){
+// 		this.paint();
+// 		return(((1<<0)&this.selectflag) !=  0)|(((1<<0)&this.broc.selectflag) !=  0);
+// 	}
+// };
 $(document).ready(function(){
 	Broc.prototype=new Draggable();
 	Node.prototype=new Draggable();
-	Applyer.prototype=new Draggable();
+	// Applyer.prototype=new Draggable();
 });

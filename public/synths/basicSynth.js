@@ -31,20 +31,25 @@ BasicSynth.prototype.init=function(){
 	}
 	this.noise=new this.Noise();
 	this.envs={
-		minikick:[{to:this.sine.vca.gain,envs:{'0':0.3,'0.32':0}},
-		{to:this.sine.oscillator.frequency,envs:{'0':440,'0.32':200}},
-		{to:this.noise.filter.frequency,envs:{'0':800,'0.32':200}},
-		{to:this.noise.vca.gain,envs:{'0':1,'0.32':0}}],
+		minikick:[
+			{
+				to:this.sine.vca.gain,
+				envs:{'0':0.3,'0.32':0}
+			},{
+				to:this.sine.oscillator.frequency,
+				envs:{'0':440,'0.32':200}
+			}
+		],
 		minisnare:[{to:this.sine.vca.gain,envs:{'0':1,'0.52':0}},
 		{to:this.sine.oscillator.frequency,envs:{'0':330,'0.32':90}},
 		{to:this.noise.filter.frequency,envs:{'0':800,'0.32':200}},
 		{to:this.noise.vca.gain,envs:{'0':1,'0.32':0}}],
 		minihh:[
-			{to:this.noise.filter.frequency,envs:{'0':400,'0.32':200}},
-			{to:this.noise.vca.gain,envs:{'0':2,'0.05':0}}],
-			minihho:[
-				{to:this.noise.filter.frequency,envs:{'0':400,'0.32':200}},
-				{to:this.noise.vca.gain,envs:{'0':1,'0.2':0}}]
+		{to:this.noise.filter.frequency,envs:{'0':400,'0.32':200}},
+		{to:this.noise.vca.gain,envs:{'0':2,'0.05':0}}],
+		minihho:[
+		{to:this.noise.filter.frequency,envs:{'0':400,'0.32':200}},
+		{to:this.noise.vca.gain,envs:{'0':1,'0.2':0}}]
 	};
 }
 //this plays an array of envelopes. These ,ust have a to:audioParam attr and a envs attribute, containing the envelopest to each audioparam

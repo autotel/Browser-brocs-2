@@ -22,7 +22,6 @@ $(document).ready(function(){
   e.preventDefault();  // cancel the native drag event chain
 //  console.log("dragstart");
 	}).on("mousemove", function(e){
-
 			pointer.mouseMove();
 	    pointer.pos.x=e.clientX-$(this).offset().left;
 	   	pointer.pos.y=e.clientY-$(this).offset().top;
@@ -46,12 +45,12 @@ $(document).ready(function(){
 		brocs[b]=new Broc(b);
 //Broc.prototype=new Draggable(0,0,brocs[i]);in practice works but is conceptually wrong
 	};
-  applyers=new Array(Object.keys(basicSynth.envs).length);
-  for (var b = 0; b < applyers.length; b++) {
-		applyers[b]=new Applyer(b,{x:40*b+20,y:720});
-    applyers[b].sound=basicSynth.envs[Object.keys(basicSynth.envs)[b]];
-	};
-
+  // applyers=new Array(Object.keys(basicSynth.envs).length);
+  // for (var b = 0; b < applyers.length; b++) {
+	// 	applyers[b]=new Applyer(b,{x:40*b+20,y:720});
+  //   applyers[b].sound=basicSynth.envs[Object.keys(basicSynth.envs)[b]];
+	// };
+  //
 
 	var metro=new Metro(-1,200,function(){
 		for (var b = 0; b < brocs.length; b++) {
