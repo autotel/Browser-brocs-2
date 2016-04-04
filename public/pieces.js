@@ -107,9 +107,22 @@ function Broc(ind){
 	this.refreshlines=function(){
 		if(this.alive){
 			for(s=0;s<this.sons.length;s++){
+				//the line should be a class on it's own.
 				if(this.sons[s].alive){
+					startx=this.pos.x;
+					starty=this.pos.y;
+					endx=this.sons[s].pos.x;
+					endy=this.sons[s].pos.y;
+					//the two circles can either be deleted and recreated, or moved.
+					if(this.sons[s].handle){
+						this.sons[s].handle.translation.x=(startx+endx)/2;
+						this.sons[s].handle.translation.y=(starty+endy)/2;
+					}else{
+						this.sons[s].handle=two.makeCircle((startx+endx)/2,(starty+endy)/2,10);
+					}
+					//I can't see how to move two lines. I jsut delete them and re-create them. Would be nice to move
 					two.remove(this.sons.line);
-					this.sons.line=new Two.Line(this.pos.x,this.pos.y,this.sons[s].pos.x, this.sons[s].pos.y).addTo(redframe);
+					this.sons.line=new Two.Line(startx,starty,endx,endy).addTo(redframe);
 				}else{
 					this.removeSon(s);
 				}
@@ -162,59 +175,7 @@ function Broc(ind){
 			basicSynth.playMultiEnvelope(randomProperty(basicSynth.envs));
 	}
 }
-
-//
-// function Applyer(ind,place){
-// 	this.place=place;
-// 	this.pos=this.place;
-// 	//only to identify it in the console
-// 	this.name="applyer";
-// 	//numeric index, for debugging purposes
-// 	this.ind=ind;
-// 	//the visible representation in two
-// 	this.sprite=new Two.Polygon(0, 0, 30, 3);
-// 	//being in a layer allows it to be always under the brocs
-// 	this.sprite.addTo(layer[1]);
-// 	//the jquery element of this node's sprite
-// 	this.$elem=$(domElem(this.sprite));
-// 	//the sound to apply upon release on broc
-// 	this.sound;
-// 	//main allows reference within jquery functions and others
-// 	main=this;
-// 	this.init();
-// 	//Functions that are triggered by the draggable class
-// 	this.onMouseUp=function(who){
-// 		//who is the subject over which mouse was released
-// 		if(who instanceof (Broc) ){
-// 			console.log("apply");
-// 			who.sound=this.sound;
-// 			sock(this.broc,"apply",who.name);
-// 		}
-// 		this.move(this.place);
-// 	}
-// 	this.onMouseDown=function(){
-// 		basicSynth.playMultiEnvelope(this.sound);
-// 	}
-// 	this.visible=function(val){
-// 		if(val){
-// 			console.log(val);
-// 			this.sprite.fill="rgba(127,255,255,0.7)";
-// 			this.sprite.stroke="black";
-// 		}else{
-// 			console.log(val);
-// 			//this.sprite.fill="transparent";
-// 			this.sprite.stroke="transparent";
-// 			//pendant: make the abspos function once an unpack
-// 			this.active=false;
-// 		}
-// 	}
-// 	this.ishover=function(){
-// 		this.paint();
-// 		return(((1<<0)&this.selectflag) !=  0)|(((1<<0)&this.broc.selectflag) !=  0);
-// 	}
-// };
 $(document).ready(function(){
 	Broc.prototype=new Draggable();
 	Node.prototype=new Draggable();
-	// Applyer.prototype=new Draggable();
 });
