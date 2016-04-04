@@ -27,7 +27,12 @@ for(a=0; a<hexPos.length; a++){
 domElem=function(me){
 	return "#"+me.id;
 }
+//testing purposes, from http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
+var randomProperty = function (obj) {
 
+	var keys = Object.keys(obj)
+	return obj[keys[ keys.length * Math.random() << 0]];
+};
 sumPos=function(a,b){
 //	//console.log(b);
 	return {x:a.x+b.x,y:a.y+b.y};

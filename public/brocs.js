@@ -1,4 +1,8 @@
 var layer=[];
+function addBroc(){
+  console.log("not started...");
+  return false;
+}
 $(document).ready(function(){
   refreshlines=function(){
   	 layer[3].remove(redframe);
@@ -17,6 +21,13 @@ $(document).ready(function(){
 	//layer that is redrawn every frame
 	redframe=two.makeGroup();
 	redframe.addTo(layer[3]);
+  brocs=new Array(0);
+  addBroc=function(){
+    var nl=brocs.length;
+    brocs[nl]=new Broc(nl);
+    return brocs[nl]
+  }
+  addBroc();
 
 	$("#canvas").on('dragstart', function (e) {
   e.preventDefault();  // cancel the native drag event chain
@@ -40,11 +51,9 @@ $(document).ready(function(){
 		//console.log("ff");
 		pointer.mouseUp(this);
 	});
-	brocs=new Array(8);
-	for (var b = 0; b < brocs.length; b++) {
-		brocs[b]=new Broc(b);
+	// for (var b = 0; b < brocs.length; b++) {
 //Broc.prototype=new Draggable(0,0,brocs[i]);in practice works but is conceptually wrong
-	};
+	// };
   // applyers=new Array(Object.keys(basicSynth.envs).length);
   // for (var b = 0; b < applyers.length; b++) {
 	// 	applyers[b]=new Applyer(b,{x:40*b+20,y:720});

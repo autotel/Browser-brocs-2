@@ -3,13 +3,19 @@
 //create one of Tone's built-in synthesizers and connect it to the master output
 var toneJsBass = new Tone.MonoSynth({
     "filter" : {
-        "type" : "highpass",
-        "Q" : 7
+        "type" : "lowpass",
+        "Q" : 2
     },
     "filterEnvelope" : {
         "attack" : 0.02,
         "decay" : 0.1,
-        "sustain" : 0.2,
+        "sustain" : 0,
+        "release" : 0.9,
+    },
+    "envelope" : {
+        "attack" : 0.02,
+        "decay" : 0.4,
+        "sustain" : 0,
         "release" : 0.9,
     }
 }).toMaster();

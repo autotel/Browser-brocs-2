@@ -19,11 +19,17 @@ function Node(ind){
 	//Functions that are triggered by the draggable class
 	this.onMouseUp=function(who){
 		//who is the subject over which mouse was released
+		//if is a broc, connect to it. If is empty area, create one and ocnnect to it
 		if(who instanceof (Broc) ){
 			this.broc.sons.push(who);
 			sock(this.broc,"sons",who.name);
+		}else{
+			nb=addBroc();
+			this.broc.sons.push(nb);
+			nb.move({x:pointer.pos.x,y:pointer.pos.y});
+			console.log(nb.name);
 		}
-		this.move(this.broc.pos)
+		this.move(this.broc.pos);
 	}
 	/*
 	this.onMove=function(){
@@ -49,15 +55,6 @@ function Node(ind){
 		return(((1<<0)&this.selectflag) !=  0)|(((1<<0)&this.broc.selectflag) !=  0);
 	}
 };
-
-
-//testing purposes, from http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
-var randomProperty = function (obj) {
-
-	var keys = Object.keys(obj)
-	return obj[keys[ keys.length * Math.random() << 0]];
-};
-
 function Broc(ind){
 	this.name="broc:"+ind;
 	this.sons=[];
